@@ -1,10 +1,5 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-if [[ ! $SCRIPT_DIR == $HOME/.bashrc.d/ ]]; then
-    echo "not user home"!
-    exit 1
-fi
-
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
 P10K_URL=https://github.com/romkatv/powerlevel10k.git
 P10K_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
@@ -23,7 +18,8 @@ if [ ! -f "${P10K_CHECK}" ] && [ -f "${OHMYZSH_CHECK}" ]; then
 fi
 
 if ! command -v "chezmoi" > /dev/null 2>&1; then
+    curr=$(pwd)
+    cd $HOME
     sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $GITHUB_USERNAME --force
+    cd $curr
 fi
-
-#shred -u "${0}"

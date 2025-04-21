@@ -4,7 +4,8 @@ ISO_ORIG       	:= base.iso
 ISO_URL 		:= https://mirror.init7.net/fedora/fedora/linux/releases/42/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-42-1.1.iso
 ISO_CUSTOM     	:= meow.iso
 KS_FILE        	:= ks.cfg
-
+FIRSTBOOT_SCRIPT:= firstboot.sh
+EXTRA_REPO		:= extra-repo
 THEME_DIR      	:= theme
 BUILD_DIR		:= build
 
@@ -31,7 +32,7 @@ build: $(ISO_ORIG)
 	sudo chown root:root $(BUILD_DIR)/$(KS_FILE)
 	sudo chown -R root:root $(BUILD_DIR)/$(THEME_DIR)
 	sudo chmod 755 $(BUILD_DIR)/$(KS_FILE)
-	sudo mkksiso -a $(BUILD_DIR)/$(THEME_DIR) -V meow $(BUILD_DIR)/$(KS_FILE) $(ISO_ORIG) $(BUILD_DIR)/$(ISO_CUSTOM)
+	sudo mkksiso -a $(BUILD_DIR)/$(THEME_DIR) -a $(EXTRA_REPO) -a $(FIRSTBOOT_SCRIPT) -V meow $(BUILD_DIR)/$(KS_FILE) $(ISO_ORIG) $(BUILD_DIR)/$(ISO_CUSTOM)
 	sudo chown sam:sam $(BUILD_DIR)/$(ISO_CUSTOM)
 	@echo "ISO rebuilt: $(ISO_CUSTOM)"
 
