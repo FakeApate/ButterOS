@@ -35,7 +35,18 @@ build: $(ISO_ORIG)
 	sudo chown sam:sam $(BUILD_DIR)/$(ISO_CUSTOM)
 	@echo "ISO rebuilt: $(ISO_CUSTOM)"
 
-
+manual: $(ISO_ORIG)
+	mkdir -p $(BUILD_DIR)
+	sudo qemu-img create -f qcow2 $(BUILD_DIR)/$(QEMU_DISK) 40G
+	sudo virt-install --name $(QEMU_NAME) \
+		--ram $(QEMU_RAM) \
+		--vcpus $(QEMU_CPU) \
+		--disk path=$(BUILD_DIR)/$(QEMU_DISK),size=40,format=qcow2 \
+		--cdrom $(ISO_ORIG) \
+		--network network=default \
+  		--graphics spice \
+		--osinfo linux2024 \
+		--boot uefi --check all=off
 test:
 	@echo "Booting ISO in QEMU..."
 	sudo qemu-img create -f qcow2 $(BUILD_DIR)/$(QEMU_DISK) 40G
